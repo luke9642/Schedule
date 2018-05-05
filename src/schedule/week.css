@@ -1,0 +1,87 @@
+ul {
+    text-align: center;
+}
+
+ul.head {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    text-transform: capitalize;
+}
+
+ul.head > li {
+    border-left: black solid 1px;
+    border-top: black solid 1px;
+    border-bottom: black solid 1px;
+    padding: 5px;
+    width: 100%;
+}
+
+ul.head > li:last-child {
+    border-right: black solid 1px;
+}
+
+ul.outside, ul.inside {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.outside {
+    display: flex;
+    justify-content: space-between;
+}
+
+ul.outside > li {
+    width: 100%;
+}
+
+ul.outside > li:last-child ul.inside li {
+    border-right: #222 solid 1px;
+}
+
+ul.inside {
+
+}
+
+ul.inside > li {
+    border-top: #ddd dashed 1px;
+    border-left: #222 solid 1px;
+}
+
+ul.inside > li:first-child {
+    border-top: none;
+}
+
+ul.inside > li:last-child {
+    border-bottom: black solid 1px;
+}
+
+ul.outside > li:nth-child(even) ul.inside > li, ul.head > li:nth-child(even) {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.event {
+    padding: 5px;
+}
+
+.event, .event > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event > a {
+    background: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+ul.outside > li.numbers, .numbers {
+    flex: 2 !important;
+    /*width: 50px !important;*/
+    font-size: 12px;
+}
