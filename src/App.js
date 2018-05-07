@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Route, HashRouter } from "react-router-dom";
+import {Route, BrowserRouter} from "react-router-dom";
 import Menu from "./menu";
 import Home from "./home";
 import Contact from "./contact";
 import Schedule from "./schedule/schedule";
 import {Col, Grid, PageHeader, Row} from 'react-bootstrap';
-import { Parallax } from 'react-parallax';
+import {Parallax} from 'react-parallax';
 import './App.css';
 
 // import logo from './logo.svg';
@@ -17,25 +17,28 @@ import './App.css';
 class App extends Component {
     constructor() {
         super();
+
         this.state = {
             image1: "project_principles.jpg",
             image2: "img3.jpg",
-            insideStyles: {background: 'white', padding: 20, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'},
+            // insideStyles: {background: 'white', padding: 20, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'},
             links: [
                 {
                     name: "Home",
                     to: "/",
-                    exact: true
+                    exact: true,
+                    subLinks: {
+                        name: "Home",
+                        to: "/#qwe"
+                    }
                 },
                 {
                     name: "Contact",
-                    to: "/Contact",
-                    exact: false
+                    to: "/Contact"
                 },
                 {
                     name: "Schedule",
-                    to: "/Schedule",
-                    exact: false
+                    to: "/Schedule"
                 }
             ]
         };
@@ -43,8 +46,9 @@ class App extends Component {
 
     render() {
         return (
-            <HashRouter>
-                <Parallax bgImage={this.state.image2} strength={500}>
+            <BrowserRouter hashType="slash">
+                {/*<Parallax bgImage={this.state.image2} strength={500}>*/}
+                <div>
                     <Grid fluid={true}>
                         <Row>
                             <Parallax bgImage={this.state.image1} strength={500}>
@@ -68,8 +72,9 @@ class App extends Component {
                             </Col>
                         </Row>
                     </Grid>
-                </Parallax>
-            </HashRouter>
+                {/*</Parallax>*/}
+                </div>
+            </BrowserRouter>
         );
     }
 }

@@ -1,18 +1,20 @@
 import React from "react";
+import Cell from "./cell";
 import "./week.css";
-
-const Cell = ({className, color, height, children, backgroundColor, colour}) => {
-    return (
-        <li className={className} style={{height: height}}><a style={{backgroundColor: backgroundColor, color: colour}}>{children}</a></li>
-    );
-};
 
 const Weekday = ({events, standardHeight}) => {
     const createLI = events.map(event => {
         const height = event.period.getDifference() * standardHeight * 4;
+        const background = event.backgroundColor === undefined ? "#fff" : event.backgroundColor;
+        let className = event.name === "" ? "" : "event";
+        const color = event.color === undefined ? "#000" : event.color;
+        const style = {height: height, backgroundColor: background, color: color};
+
+        if (event.period.start.minutes === 0)
+            className += " fullHour";
 
         return (
-            <Cell className={event.name !== "" ? "event" : ""} key={event.id} height={height} backgroundColor={event.backgroundColor} colour={event.color}>
+            <Cell className={className} key={event.hashCode()} style={style}>
                 {event.name}
             </Cell>
         );
@@ -25,18 +27,23 @@ const Weekday = ({events, standardHeight}) => {
 
 const Week = ({weekdays, periods}) => {
     const standardHeight = 25;
-    const createHeader = Object.keys(weekdays).map(weekday => <li key={weekday} style={{flex: 4}}>{weekday}</li>);
-    const createColumn = Object.keys(weekdays).map(weekday => (<li key={weekday} style={{flex: 4}}><Weekday events={weekdays[weekday].events} standardHeight={standardHeight}/></li>));
-    const createTimes = periods.map(period => <Cell height={standardHeight}>{period.start.toString() + " - " + period.end.toString()}</Cell>);
+    const style = {backgroundColor: "transparent", color: "#000", height: standardHeight};
+    const createHeader = Object.keys(weekdays).map(weekday => <li key={weekday} style={{flex: 1}}>{weekday}</li>);
+    const createColumn = Object.keys(weekdays).map(weekday => <li key={weekday} style={{flex: 1}}><Weekday events={weekdays[weekday].events} standardHeight={standardHeight}/></li>);
+    const createTimes = periods.map(period => {
+        let className = "";
+
+        if (period.start.minutes === 0)
+            className = "fullHour";
+        return <Cell key={period.hashCode()} className={className} style={style}>{period.toString()}</Cell>;
+    });
 
     return [
-        <ul className="head">
-            <li className="numbers">
-                #
-            </li>
+        <ul key="head" className="head">
+            <li className="numbers"/>
             {createHeader}
             </ul>,
-        <ul className="outside">
+        <ul key="outside" className="outside">
             <li className="numbers">
                 <ul className="inside">
                     {createTimes}

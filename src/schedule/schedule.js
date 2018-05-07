@@ -82,40 +82,6 @@ class Schedule extends Component {
         return periods;
     };
 
-    // tmp() {
-    //     const times = this.state.hours.generateTimes();
-    //     const weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-    //     let arr = new Array(8);
-    //
-    //     for (let i = 0; i < 8; i++) {
-    //         arr[i] = new Array(times.length);
-    //     }
-    //
-    //     for (let i = 0; i < times.length; ++i) {
-    //         arr[0][i] = times[i];
-    //     }
-    //     //
-    //     // weekdays.forEach(weekday => {
-    //     //     this.state.weekdays[weekday].generateEvents.forEach(event => {
-    //     //         // arr[weekdays.findIndex(weekday)][] times.findIndex(time => time.equals(event.start));
-    //     //
-    //     //     });
-    //     //
-    //     //     // hours.initialTime;
-    //     //     // arr[][i]+
-    //     // });
-    //
-    //     return arr;
-    // }
-    //
-    // const getRow = (row) => row.map(cell => (<th>{cell}</th>));
-    //
-    // const LinkButton = ({to, exact=false, children}) => (
-    //     <NavLink className="btn btn-default" exact={exact} to={to} activeClassName="btn-primary">{children}</NavLink>
-    // );
-    //
-    // const createLinks = links.map(link => (<LinkButton key={link.name} to={link.to} exact={link.exact}>{link.name}</LinkButton>));
-
     generateEvents = (weekday, periods) => {
         let events = [];
         let i = 0;

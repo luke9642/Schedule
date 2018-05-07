@@ -1,13 +1,23 @@
 import React from "react";
 import {ButtonGroup} from "react-bootstrap";
-import {NavLink} from "react-router-dom";
+import {NavHashLink} from "react-router-hash-link";
 
 const Menu = ({links}) => {
-    const LinkButton = ({to, exact=false, children}) => (
-        <NavLink className="btn btn-default" exact={exact} to={to} activeStyle={{pointerEvents: "none"}} activeClassName="btn-primary">{children}</NavLink>
+    const LinkButton = ({to, exact=false, subLinks, children}) => (
+        <NavHashLink className="btn btn-default" exact={exact} smooth to={to} activeStyle={{pointerEvents: "none"}} activeClassName="btn-primary">{children}</NavHashLink>
     );
 
-    const createLinks = links.map(link => (<LinkButton key={link.name} to={link.to} exact={link.exact}>{link.name}</LinkButton>));
+    const createLinks = links.map(link => {
+        let children;
+        // TODO
+        // if (link.subLinks === undefined) {
+        //     children = link.name;
+        // } else {
+        //     children = link.subLinks.map(subLink => )
+        // }
+
+        return <LinkButton key={link.name} to={link.to} exact={link.exact}>{link.name}</LinkButton>;
+    });
 
     return (
         <ButtonGroup justified>{createLinks}</ButtonGroup>
