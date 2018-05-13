@@ -7,6 +7,7 @@ import Schedule from "./schedule/schedule";
 import {Col, Grid, PageHeader, Row} from 'react-bootstrap';
 import {Parallax} from 'react-parallax';
 import './App.css';
+import Notes from "./notes/notes";
 
 // import logo from './logo.svg';
 // import axios from 'axios';
@@ -21,7 +22,6 @@ class App extends Component {
         this.state = {
             image1: "project_principles.jpg",
             image2: "img3.jpg",
-            // insideStyles: {background: 'white', padding: 20, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'},
             links: [
                 {
                     name: "Home",
@@ -37,6 +37,10 @@ class App extends Component {
                     to: "/Contact"
                 },
                 {
+                    name: "Notes",
+                    to: "/Notes"
+                },
+                {
                     name: "Schedule",
                     to: "/Schedule"
                 }
@@ -46,10 +50,10 @@ class App extends Component {
 
     render() {
         return (
-            <BrowserRouter hashType="slash">
+            <BrowserRouter>
                 {/*<Parallax bgImage={this.state.image2} strength={500}>*/}
                 <div>
-                    <Grid fluid={true}>
+                    <Grid fluid>
                         <Row>
                             <Parallax bgImage={this.state.image1} strength={500}>
                                 <PageHeader>
@@ -67,6 +71,7 @@ class App extends Component {
                                 <div className="content">
                                     <Route exact path="/" component={Home}/>
                                     <Route path="/contact" component={Contact}/>
+                                    <Route path="/notes" component={Notes}/>
                                     <Route path="/schedule" component={Schedule}/>
                                 </div>
                             </Col>

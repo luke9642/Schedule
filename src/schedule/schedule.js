@@ -12,45 +12,45 @@ class Schedule extends Component {
         let weekdays = {
             monday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(9, 30)), "", "monday", "#4285F4", "#fff"),
-                    new Event("Polish", new Period(new Time(9, 30), new Time(10, 30)), "", "monday", "#FBBC05", "#fff")
+                    new Event("English", new Period(new Time(8, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#4285F4", "#fff"),
+                    new Event("Polish", new Period(new Time(9, 30), new Time(10, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#FBBC05", "#fff")
                 ]
             },
             tuesday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "", "tuesday", "#34A853", "#fff"),
-                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "", "tuesday", "#EA4335", "#fff"),
-                    new Event("Physics", new Period(new Time(13, 0), new Time(16, 0)), "", "tuesday", "#EA4335", "#fff")
+                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#34A853", "#fff"),
+                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff"),
+                    new Event("Physics", new Period(new Time(13, 0), new Time(16, 0)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff")
                 ]
             },
             wednesday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "", "wednesday"),
-                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "", "wednesday")
+                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday"),
+                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday")
                 ]
             },
             thursday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "", "thursday"),
-                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "", "thursday")
+                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday"),
+                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday")
                 ]
             },
             friday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "", "friday"),
-                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "", "friday")
+                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday"),
+                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday")
                 ]
             },
             saturday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "", "saturday"),
-                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "", "saturday")
+                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday"),
+                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday")
                 ]
             },
             sunday: {
                 events: [
-                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "", "sunday"),
-                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "", "sunday")
+                    new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday"),
+                    new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday")
                 ]
             }
         };
@@ -68,9 +68,10 @@ class Schedule extends Component {
         };
     }
 
-    componentDidMount() {
+    // noinspection JSUnusedGlobalSymbols
+    componentDidMount = () => {
 
-    }
+    };
 
     getPeriods = hours => {
         const times = hours.generateTimes();
@@ -89,13 +90,13 @@ class Schedule extends Component {
         periods.forEach(period => {
             if (i < weekday.events.length) {
                 if (period.end.toNumber() <= weekday.events[i].period.start.toNumber()) {
-                    events.push(new Event("", period, ""));
+                    events.push(new Event(null, period));
                 }
                 else if (period.end.toNumber() === weekday.events[i].period.end.toNumber()) {
                     events.push(weekday.events[i++]);
                 }
             } else {
-                events.push(new Event("", period, ""));
+                events.push(new Event(null, period));
             }
         });
 
