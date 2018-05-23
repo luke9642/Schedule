@@ -24,9 +24,7 @@ const Weekday = ({events, standardHeight}) => {
         return result;
     });
 
-    return (
-        <ul className="inside">{createLI}</ul>
-    );
+    return <ul className="inside">{createLI}</ul>;
 };
 
 const Week = ({weekdays, periods}) => {
