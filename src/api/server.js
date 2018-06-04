@@ -1,8 +1,6 @@
-let Period = require("../schedule/period");
-let Time = require("../schedule/time");
-
 let express = require('express');
 let app = express();
+var passport = require('./config/passport');
 let cors = require('cors');
 
 app.use(cors());
@@ -12,7 +10,7 @@ app.use(express.static('public'));
 app.get('/links', function(req, res) {
     // res.sendFile( __dirname + "/" + "index.htm" );
     // let obj = JSON.parse(fs.readFileSync('persons.json', 'utf8'));
-
+    //
     // fs.readFile('persons.json', function (err, data) {
     //     if (err){
     //         console.log(err);
@@ -42,8 +40,8 @@ app.get('/links', function(req, res) {
             ]
         },
         {
-            name: "Contact",
-            to: "/Contact"
+            name: "Profile",
+            to: "/Profile"
         },
         {
             name: "Notes",
@@ -61,7 +59,7 @@ app.get('/links', function(req, res) {
 app.get('/events', function(req, res) {
     // res.sendFile( __dirname + "/" + "index.htm" );
     // let obj = JSON.parse(fs.readFileSync('persons.json', 'utf8'));
-
+    //
     // fs.readFile('persons.json', function (err, data) {
     //     if (err){
     //         console.log(err);
@@ -77,49 +75,320 @@ app.get('/events', function(req, res) {
     //         res.send(results);
     //     }
     // });
+    //
+    //new Event("English", new Period(new Time(8, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#4285F4", "#fff"),
+    //                 new Event("Polish", new Period(new Time(9, 30), new Time(10, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#FBBC05", "#fff")
+    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#34A853", "#fff"),
+    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff"),
+    //                 new Event("Physics", new Period(new Time(13, 0), new Time(16, 0)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff")
+    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday"),
+    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday")
+    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday"),
+    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday")
+    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday"),
+    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday")
+    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday"),
+    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday")
+    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday"),
+    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday")
 
     let results = {
         monday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#4285F4", "#fff"),
-                new Event("Polish", new Period(new Time(9, 30), new Time(10, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#FBBC05", "#fff")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "monday",
+                    backgroundColor: "#4285F4",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 30
+                        },
+                        end: {
+                            hours: 10,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "monday",
+                    backgroundColor: "#FBBC05",
+                    color: "#fff"
+                }
             ]
         },
         tuesday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#34A853", "#fff"),
-                new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff"),
-                new Event("Physics", new Period(new Time(13, 0), new Time(16, 0)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 8,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "tuesday",
+                    backgroundColor: "#34A853",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "tuesday",
+                    backgroundColor: "#EA4335",
+                    color: "#fff"
+                },
+                {
+                    name: "Physics",
+                    period: {
+                        start: {
+                            hours: 13,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 16,
+                            minutes: 0
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "tuesday",
+                    backgroundColor: "#EA4335",
+                    color: "#fff"
+                }
             ]
         },
         wednesday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday"),
-                new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "wednesday",
+                    backgroundColor: "#4285F4",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 30
+                        },
+                        end: {
+                            hours: 10,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "wednesday",
+                    backgroundColor: "#FBBC05",
+                    color: "#fff"
+                }
             ]
         },
         thursday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday"),
-                new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "thursday",
+                    backgroundColor: "#4285F4",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 30
+                        },
+                        end: {
+                            hours: 10,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "thursday",
+                    backgroundColor: "#FBBC05",
+                    color: "#fff"
+                }
             ]
         },
         friday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday"),
-                new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "friday",
+                    backgroundColor: "#4285F4",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 30
+                        },
+                        end: {
+                            hours: 10,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "friday",
+                    backgroundColor: "#FBBC05",
+                    color: "#fff"
+                }
             ]
         },
         saturday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday"),
-                new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "saturday",
+                    backgroundColor: "#4285F4",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 30
+                        },
+                        end: {
+                            hours: 10,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "saturday",
+                    backgroundColor: "#FBBC05",
+                    color: "#fff"
+                }
             ]
         },
         sunday: {
             events: [
-                new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday"),
-                new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday")
+                {
+                    name: "English",
+                    period: {
+                        start: {
+                            hours: 8,
+                            minutes: 0
+                        },
+                        end: {
+                            hours: 9,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "sunday",
+                    backgroundColor: "#4285F4",
+                    color: "#fff"
+                },
+                {
+                    name: "Polish",
+                    period: {
+                        start: {
+                            hours: 9,
+                            minutes: 30
+                        },
+                        end: {
+                            hours: 10,
+                            minutes: 30
+                        }
+                    },
+                    description_brief: "Lorem ipsum",
+                    description: "Lorem ipsum dolor sit amet",
+                    weekday: "sunday",
+                    backgroundColor: "#FBBC05",
+                    color: "#fff"
+                }
             ]
         }
     };
@@ -187,31 +456,53 @@ app.get('/notes', function(req, res) {
 });
 
 
-// app.get('/process_get', function(req, res) {
-//     // Prepare output in JSON format
-//     let response = {
-//         first_name: req.query.first_name,
-//         last_name: req.query.last_name
-//     };
-//
-//     fs.readFile('persons.json', 'utf8', function readFileCallback(err, data) {
-//         if (err){
-//             console.log(err);
-//         } else {
-//             let obj = JSON.parse(data);
-//             obj.push(response);
-//             let json = JSON.stringify(obj);
-//             fs.writeFile('persons.json', json, 'utf8', function (err) {
-//                 if (err)
-//                     throw err;
-//                 console.log(json);
-//                 res.send("<div><h3>Person saved</h3></div><div><a href='/'>Add new person</a><br/><a href='/persons'>Read all persons</a></div>");
-//             });
-//
-//             //    JSON.stringify(obj)
-//         }
-//     });
-// });
+app.post('/user', function(req, res) {
+    // Prepare output in JSON format
+    let response = {
+        login: req.query.login,
+        password: req.query.password
+    };
+
+
+
+    let results = {
+
+    }
+
+    res.json(results);
+});
+
+app.get('/process_get', function(req, res) {
+    // Prepare output in JSON format
+    let response = {
+        first_name: req.query.first_name,
+        last_name: req.query.last_name
+    };
+
+    fs.readFile('persons.json', 'utf8', function readFileCallback(err, data) {
+        if (err){
+            console.log(err);
+        } else {
+            let obj = JSON.parse(data);
+            obj.push(response);
+            let json = JSON.stringify(obj);
+            fs.writeFile('persons.json', json, 'utf8', function (err) {
+                if (err)
+                    throw err;
+                console.log(json);
+                res.send("<div><h3>Person saved</h3></div><div><a href='/'>Add new person</a><br/><a href='/persons'>Read all persons</a></div>");
+            });
+
+            //    JSON.stringify(obj)
+        }
+    });
+});
+
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    failureFlash: true,
+}));
 
 let server = app.listen(8081, function() {
     let host = server.address().address;
