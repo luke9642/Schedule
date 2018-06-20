@@ -31,16 +31,85 @@
     background: white
 }
 
-.container {
+.main-content {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background: #fff;
+}
+
+.pt-20 {
+    padding-top: 20px;
+}
+
+.pb-20 {
+    padding-bottom: 20px;
+}
+
+.p-0 {
+    padding: 0;
+}
+
+main {
+    background-size: contain;
+    background-attachment: fixed;
+}
+
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    display: block;
+    z-index: 100;
+}
+
+.transit {
+    transition: all 0.5s;
+}
+
+.react-parallax-content {
+    height: 500px;
+}
+img {
+    max-width: 1200px;
+}
+
+.react-parallax {
+    margin: 50px 0;
+}
+
+.react-parallax-content h1 {
+    color: #fff;
+    padding: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.react-parallax-bgimage, .page-header {
-    /*height: 100px;*/
+#Home1 {
+    background: #944743;
 }
 
-.page-header small {
-    margin-left: 20px;
+#Home2 {
+    background: #00A591;
 }
 
+#Home3 {
+    background: #D2691E;
+}
+
+.align-justify {
+    text-align: justify;
+}
+
+@media (max-width: 770px) {
+    .sticky-nav {
+        position: static;
+    }
+}
+
+@media (max-width: 991px) {
+    .media-right {
+        display: block;
+        text-align: center;
+    }
+}

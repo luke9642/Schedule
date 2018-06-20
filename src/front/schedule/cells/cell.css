@@ -27,9 +27,25 @@
 .popoverTitle span:hover {
   opacity: 0.9;
 }
-.modal-content .modal-header .form-control,
-.modal-content .modal-body .form-control {
+.modal-content .modal-header input.form-control {
   border: none;
   box-shadow: none;
+}
+.modal-content .modal-header input.form-control:focus {
+  background: #eee;
+}
+.modal-content .modal-body textarea.form-control {
+  border: none;
+  box-shadow: none;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 300px;
+  resize: none;
+}
+.modal-content .modal-body textarea.form-control:focus {
+  background: #eee;
+}
+.edit {
+  cursor: pointer;
 }
 /*# sourceMappingURL=cell.css.map */

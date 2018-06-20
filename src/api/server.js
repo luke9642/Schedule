@@ -41,7 +41,7 @@ app.get('/links', function(req, res) {
         },
         {
             name: "Profile",
-            to: "/Profile"
+            to: "/profile"
         },
         {
             name: "Notes",

@@ -4,7 +4,7 @@ import TimeCell from "./cells/time_cell";
 import EventCell from "./cells/event_cell";
 import "./week.css";
 
-const Weekday = ({events, standardHeight}) => {
+const Weekday = ({events, standardHeight, updateEvents, weekdays}) => {
     const createLI = events.map(event => {
         let result;
         const style = {
@@ -15,7 +15,7 @@ const Weekday = ({events, standardHeight}) => {
 
         if (event.name !== null) {
             let className = event.period.start.minutes === 0 ? "event fullHour" : "event";
-            result = <EventCell className={className} key={event.hashCode()} style={style} event={event}>{event.name}</EventCell>;
+            result = <EventCell weekdays={weekdays} updateEvents={updateEvents} className={className} key={event.hashCode()} style={style} event={event}>{event.name}</EventCell>;
         } else {
             let className = event.period.start.minutes === 0 ? "fullHour" : null;
             result = <Cell className={className} key={event.hashCode()} style={{height: style.height}}/>;
@@ -27,11 +27,11 @@ const Weekday = ({events, standardHeight}) => {
     return <ul className="inside">{createLI}</ul>;
 };
 
-const Week = ({weekdays, periods}) => {
+const Week = ({weekdays, periods, updateEvents}) => {
     const standardHeight = 25;
     const flex = {flex: 1};
     const createHeader = Object.keys(weekdays).map(weekday => <li key={weekday} style={flex}>{weekday}</li>);
-    const createColumn = Object.keys(weekdays).map(weekday => <li key={weekday} style={flex}><Weekday events={weekdays[weekday].events} standardHeight={standardHeight}/></li>);
+    const createColumn = Object.keys(weekdays).map(weekday => <li key={weekday} style={flex}><Weekday weekdays={Object.keys(weekdays)} updateEvents={updateEvents} events={weekdays[weekday].events} standardHeight={standardHeight}/></li>);
     const createTimes = periods.map(period => {
         let className = "";
         if (period.start.minutes === 0)

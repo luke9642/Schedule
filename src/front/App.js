@@ -1,79 +1,65 @@
-import React, { Component } from 'react';
-import {Route, BrowserRouter} from "react-router-dom";
-import Menu from "./menu/menu";
-import Home from "./home";
-import Profile from "./profile";
-import Schedule from "./schedule/schedule";
-import {Col, Grid, PageHeader, Row} from 'react-bootstrap';
-import {Parallax} from 'react-parallax';
-import './App.css';
-import Notes from "./notes/notes";
+import React, {Component} from 'react';
+import {Route, BrowserRouter, Redirect, Switch} from "react-router-dom";
+import {Col, Grid, Row} from 'react-bootstrap';
 import axios from 'axios';
-import Login from "./login/login";
 
+import './App.css';
+
+import Notes from "./notes/notes";
+import Login from "./login/login";
+import Header from "./header/header";
+import Menu from "./menu/menu";
+import Home from "./home/home";
+import Profile from "./profile/profile";
+import Schedule from "./schedule/schedule";
 
 // import logo from './logo.svg';
-// import axios from 'axios';
-// import $ from "jquery";
-// noinspection ES6CheckImport
-// import { Parallax, Background } from 'react-parallax';
 
 export default class App extends Component {
     state = {
-        image1: "abstract-art-artificial-131634.jpg",
-        image2: "abstract-art-background-1020317.jpg",
-        links: []
+        image: "background-2.jpg",
+        links: [],
+        loggedIn: false
     };
 
     componentDidMount() {
-        axios
-            .get('http://localhost:3001/links')
-            .then((response) => this.setState({links: response.data}))
-            .catch((error) => console.log(error));
+        this.updateLinks();
     }
 
-    getHeader = () => this.state.links.map(link => {
-        return (<Route key={link.name} exact path={link.to} render={() => (
-            <small>{link.name}</small>
-        )}/>)
-   });
+    updateLinks = (loggedIn) => {
+        axios
+            .get('http://localhost:3001/links', {withCredentials: true})
+            .then((response) => {
+                let states = {links: response.data};
+                if (loggedIn != null)
+                    states.loggedIn = loggedIn;
+                this.setState(states);
+            })
+            .catch((error) => console.log(error));
+    };
 
     render() {
         return (
             <BrowserRouter>
-                {/*<Parallax bgImage={this.state.image2} strength={500}>*/}
-                    <div>
-                        <Grid fluid>
-                            <Row>
-                                {/*<Parallax bgImage={this.state.image1} strength={500}>*/}
-                                    <PageHeader>
-                                        Schedule App
-                                        {this.getHeader()}
-                                    </PageHeader>
-                                {/*</Parallax>*/}
-                            </Row>
-                        </Grid>
-                        <Grid>
-                            <Row>
-                                <br/>
-                                <Col md={12}>
-                                    <Menu links={this.state.links}/>
-                                </Col>
-                                <br/>
-                                <br/>
-                                <Col md={12}>
-                                    <div className="content">
-                                        <Route exact path="/" component={Home}/>
-                                        <Route path="/profile" component={Profile}/>
-                                        <Route path="/notes" component={Notes}/>
-                                        <Route path="/schedule" component={Schedule}/>
-                                        <Route path="/login" component={Login}/>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    </div>
-                {/*</Parallax>*/}
+                <main style={{backgroundImage: `url(${this.state.image})`, minHeight: window.innerHeight}}>
+                    <Header title="Schedule App" links={this.state.links}/>
+                    <Menu links={this.state.links} updateLinks={this.updateLinks} loggedIn={this.state.loggedIn}/>
+                    <Grid className="main-content pt-20 pb-20">
+                        <Row>
+                            <Col md={12} style={{overflowX: "auto"}}>
+                                <Switch>
+                                    <Route exact path="/" component={Home}/>
+                                    <Route path="/profile" component={Profile}/>
+                                    <Route path="/notes" component={Notes}/>
+                                    <Route path="/schedule" component={Schedule}/>
+                                    <Route path="/logout" render={() => <Redirect to="/login"/>}/>
+                                    <Route path="/login" render={(props) => <Login loggedIn={this.state.loggedIn}
+                                                                                   updateLinks={this.updateLinks} {...props}/>}/>
+                                </Switch>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </main>
             </BrowserRouter>
         );
     }

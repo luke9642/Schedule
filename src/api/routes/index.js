@@ -1,602 +1,456 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
+const express = require('express');
+const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const router = express.Router();
 
-router.get('/links', function (req, res) {
-    // res.sendFile( __dirname + "/" + "index.htm" );
-    // let obj = JSON.parse(fs.readFileSync('persons.json', 'utf8'));
-    //
-    // fs.readFile('persons.json', function (err, data) {
-    //     if (err){
-    //         console.log(err);
-    //     } else {
-    //         let obj = JSON.parse(data);
-    //         console.log(obj);
-    //
-    //         let results = "<div><ul>";
-    //         obj.forEach(person => {
-    //             results += "<li>" + person.first_name + "  " + person.last_name + "</li>";
-    //         });
-    //         results += "</ul><div><a href='/'>Add new person</a></div></div>";
-    //         res.send(results);
-    //     }
-    // });
-
+router.get('/links', (req, res) => {
     let results = [
         {
             name: "Home",
             to: "/",
+            color: "#2E4A62",
             exact: true,
             subLinks: [
                 {
-                    name: "Qwe",
-                    to: "/#qwe"
+                    name: "Home1",
+                    to: "/#Home1"
+                },
+                {
+                    name: "Home2",
+                    to: "/#Home2"
+                },
+                {
+                    name: "Home3",
+                    to: "/#Home3"
                 }
             ]
         },
         {
             name: "Profile",
-            to: "/Profile"
+            to: "/profile",
+            color: "#944743"
         },
         {
             name: "Notes",
-            to: "/Notes"
+            to: "/Notes",
+            color: "#00A591"
         },
         {
             name: "Schedule",
-            to: "/Schedule"
+            to: "/Schedule",
+            color: "#D2691E"
         },
         {
             name: "Login",
-            to: "/Login"
+            to: "/Login",
+            color: "#005960"
+        },
+        {
+            name: "Logout",
+            to: "/Logout",
+            color: ""
         }
     ];
 
+    let loggedUser = getLoggedUser(req.cookies);
+    let linksToRemove;
+
+    if (loggedUser.loggedIn) {
+        linksToRemove = ["Login"];
+    } else {
+        linksToRemove = ["Profile", "Notes", "Schedule", "Logout"];
+    }
+
+    results = results.filter(link => !linksToRemove.includes(link.name));
     res.json(results);
 });
 
-router.get('/events', function (req, res) {
-    // res.sendFile( __dirname + "/" + "index.htm" );
-    // let obj = JSON.parse(fs.readFileSync('persons.json', 'utf8'));
-    //
-    // fs.readFile('persons.json', function (err, data) {
-    //     if (err){
-    //         console.log(err);
-    //     } else {
-    //         let obj = JSON.parse(data);
-    //         console.log(obj);
-    //
-    //         let results = "<div><ul>";
-    //         obj.forEach(person => {
-    //             results += "<li>" + person.first_name + "  " + person.last_name + "</li>";
-    //         });
-    //         results += "</ul><div><a href='/'>Add new person</a></div></div>";
-    //         res.send(results);
-    //     }
-    // });
-    //
-    //new Event("English", new Period(new Time(8, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#4285F4", "#fff"),
-    //                 new Event("Polish", new Period(new Time(9, 30), new Time(10, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "monday", "#FBBC05", "#fff")
-    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#34A853", "#fff"),
-    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff"),
-    //                 new Event("Physics", new Period(new Time(13, 0), new Time(16, 0)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "tuesday", "#EA4335", "#fff")
-    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday"),
-    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "wednesday")
-    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday"),
-    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "thursday")
-    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday"),
-    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "friday")
-    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday"),
-    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "saturday")
-    //new Event("English", new Period(new Time(8, 0), new Time(8, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday"),
-    //                 new Event("Polish", new Period(new Time(9, 0), new Time(9, 30)), "Lorem ipsum", "Lorem ipsum dolor sit amet", "sunday")
-
-    let results = {
-        monday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "monday",
-                    backgroundColor: "#4285F4",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 30
-                        },
-                        end: {
-                            hours: 10,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "monday",
-                    backgroundColor: "#FBBC05",
-                    color: "#fff"
-                }
-            ]
-        },
-        tuesday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 8,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "tuesday",
-                    backgroundColor: "#34A853",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "tuesday",
-                    backgroundColor: "#EA4335",
-                    color: "#fff"
-                },
-                {
-                    name: "Physics",
-                    period: {
-                        start: {
-                            hours: 13,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 16,
-                            minutes: 0
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "tuesday",
-                    backgroundColor: "#EA4335",
-                    color: "#fff"
-                }
-            ]
-        },
-        wednesday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "wednesday",
-                    backgroundColor: "#4285F4",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 30
-                        },
-                        end: {
-                            hours: 10,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "wednesday",
-                    backgroundColor: "#FBBC05",
-                    color: "#fff"
-                }
-            ]
-        },
-        thursday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "thursday",
-                    backgroundColor: "#4285F4",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 30
-                        },
-                        end: {
-                            hours: 10,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "thursday",
-                    backgroundColor: "#FBBC05",
-                    color: "#fff"
-                }
-            ]
-        },
-        friday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "friday",
-                    backgroundColor: "#4285F4",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 30
-                        },
-                        end: {
-                            hours: 10,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "friday",
-                    backgroundColor: "#FBBC05",
-                    color: "#fff"
-                }
-            ]
-        },
-        saturday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "saturday",
-                    backgroundColor: "#4285F4",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 30
-                        },
-                        end: {
-                            hours: 10,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "saturday",
-                    backgroundColor: "#FBBC05",
-                    color: "#fff"
-                }
-            ]
-        },
-        sunday: {
-            events: [
-                {
-                    name: "English",
-                    period: {
-                        start: {
-                            hours: 8,
-                            minutes: 0
-                        },
-                        end: {
-                            hours: 9,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "sunday",
-                    backgroundColor: "#4285F4",
-                    color: "#fff"
-                },
-                {
-                    name: "Polish",
-                    period: {
-                        start: {
-                            hours: 9,
-                            minutes: 30
-                        },
-                        end: {
-                            hours: 10,
-                            minutes: 30
-                        }
-                    },
-                    description_brief: "Lorem ipsum",
-                    description: "Lorem ipsum dolor sit amet",
-                    weekday: "sunday",
-                    backgroundColor: "#FBBC05",
-                    color: "#fff"
-                }
-            ]
-        }
-    };
-
-    res.json(results);
-});
-
-router.get('/notes', function (req, res) {
-    let results = [
-        {
-            name: "name1",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula tellus at erat auctor varius. Quisque auctor est molestie, ornare lacus eu, imperdiet neque. Suspendisse potenti. Sed ullamcorper erat sed justo vulputate accumsan. Phasellus molestie purus orci, lobortis pretium risus pretium nec. Suspendisse bibendum libero mauris, vel gravida tortor commodo at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tellus magna, porttitor nec purus sed, imperdiet varius risus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec non nisi lacus. Quisque aliquet dolor nisl, non imperdiet sem maximus ac.\n" +
-            "\n" +
-            "                Praesent luctus justo sed mollis pulvinar. Phasellus libero elit, mollis eget posuere sed, facilisis et nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis egestas nibh, non placerat turpis. Fusce ornare tortor quis libero porta interdum. Phasellus nibh justo, semper a nulla ac, porttitor semper nibh. Duis pretium molestie porta. Nam quis commodo sapien. Nulla blandit elit ut cursus ullamcorper. Pellentesque elementum vitae elit et cursus. Donec orci metus, sodales non sagittis id, sagittis at risus.\n" +
-            "\n" +
-            "                Aliquam finibus purus velit, ut ullamcorper magna ornare vitae. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi magna massa, sollicitudin ac lacus non, interdum aliquam lectus. Nunc blandit tempus porta. In tempus, lacus ac ullamcorper pretium, metus metus commodo magna, sagittis dignissim massa ante quis ipsum. Integer luctus molestie neque, vitae semper quam ultricies a. Ut ullamcorper sollicitudin lobortis. Donec quis turpis in diam lobortis venenatis eget sed tellus. Praesent vel nisi vitae sem luctus iaculis. Sed a dui nisi. Aliquam ullamcorper auctor ullamcorper.\n" +
-            "\n",
-            background: "#4285F4",
-            color: "#000"
-        },
-        {
-            name: "name2",
-            content: "Lorem ipsum",
-            background: "#FBBC05",
-            color: "#000"
-        },
-        {
-            name: "name3",
-            content: "Morbi quis condimentum sem, non iaculis eros. Morbi eget tellus nisl. Mauris vehicula sollicitudin mauris, eu volutpat justo pretium id. Integer sed auctor mi. Fusce ac arcu nunc. Donec eu nunc congue, tincidunt mi ut, ornare odio. Vestibulum tristique imperdiet lacinia. Suspendisse vitae tincidunt dui, in suscipit mauris. Integer nec laoreet nunc.\n" +
-            "\n" +
-            "                Vivamus at purus vitae nunc bibendum facilisis eget eu sapien. Nunc vitae sapien velit. Fusce iaculis augue eu sodales porta. Fusce mattis justo sit amet odio vehicula, vitae hendrerit urna faucibus. Cras malesuada leo eu vulputate consequat. In id tempor arcu. In elementum dolor ac elit scelerisque ultrices. Suspendisse vitae consequat tortor. Sed facilisis leo non sapien ornare, interdum ultricies urna iaculis. Quisque in dictum nisl. Fusce eget massa nisi. Curabitur ornare mauris eu libero auctor efficitur. Sed aliquam dictum mauris, ac condimentum eros. Nullam a sem elementum arcu luctus eleifend.\n" +
-            "\n" +
-            "                Curabitur a odio vel elit dictum",
-            background: "#34A853",
-            color: "#000"
-        },
-        {
-            name: "name4",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula tellus at erat auctor varius. Quisque auctor est molestie, ornare lacus eu, imperdiet neque. Suspendisse potenti. Sed ullamcorper erat sed justo vulputate accumsan. Phasellus molestie purus orci, lobortis pretium risus pretium nec. Suspendisse bibendum libero mauris, vel gravida tortor commodo at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tellus magna, porttitor nec purus sed, imperdiet varius risus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec non nisi lacus. Quisque aliquet dolor nisl, non imperdiet sem maximus ac.\n" +
-            "\n" +
-            "                Praesent luctus justo sed mollis pulvinar. Phasellus libero elit, mollis eget posuere sed, facilisis et nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin iaculis egestas nibh, non placerat turpis. Fusce ornare tortor quis libero porta interdum. Phasellus nibh justo, semper a nulla ac, porttitor semper nibh. Duis pretium molestie porta. Nam quis commodo sapien. Nulla blandit elit ut cursus ullamcorper. Pellentesque elementum vitae elit et cursus. Donec orci metus, sodales non sagittis id, sagittis at risus.\n" +
-            "\n",
-            background: "#EA4335",
-            color: "#000"
-        },
-        {
-            name: "name5",
-            content: "Lorem ipsum",
-            background: "#EA4335",
-            color: "#000"
-        },
-        {
-            name: "name6",
-            content: "Morbi quis condimentum sem, non iaculis eros. Morbi eget tellus nisl. Mauris vehicula sollicitudin mauris, eu volutpat justo pretium id. Integer sed auctor mi. Fusce ac arcu nunc. Donec eu nunc congue, tincidunt mi ut, ornare odio. Vestibulum tristique imperdiet lacinia. Suspendisse vitae tincidunt dui, in suscipit mauris. Integer nec laoreet nunc.\n" +
-            "\n" +
-            "                Vivamus at purus vitae nunc bibendum facilisis eget eu sapien. Nunc vitae sapien velit. Fusce iaculis augue eu sodales porta. Fusce mattis justo sit amet odio vehicula, vitae hendrerit urna faucibus. Cras malesuada leo eu vulputate consequat. In id tempor arcu. In elementum dolor ac elit scelerisque ultrices. Suspendisse vitae consequat tortor. Sed facilisis leo non sapien ornare, interdum ultricies urna iaculis. Quisque in dictum nisl. Fusce eget massa nisi. Curabitur ornare mauris eu libero auctor efficitur. Sed aliquam dictum mauris, ac condimentum eros. Nullam a sem elementum arcu luctus eleifend.\n" +
-            "\n" +
-            "                Curabitur a odio vel elit dictum",
-            background: "#34A853",
-            color: "#000"
-        },
-    ];
-
-    res.json(results);
-});
-
-// router.get('/', function(req, res, next) {
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   console.log("21476089127692158762198721565218972512");
-//   let results = [
-//       {
-//           name: "Home",
-//           to: "/",
-//           exact: true,
-//           subLinks: [
-//               {
-//                   name: "Qwe",
-//                   to: "/#qwe"
-//               }
-//           ]
-//       },
-//       {
-//           name: "Profile",
-//           to: "/Profile"
-//       },
-//       {
-//           name: "Notes",
-//           to: "/Notes"
-//       },
-//       {
-//           name: "Schedule",
-//           to: "/Schedule"
-//       }
-//   ];
-//
-//   res.json(results);
-// });
-
-// router.get('/login', function (req, res, next) {
-//     // req.query
-//     console.log("login");
-//     res.render('login.ejs', {message: req.flash('loginMessage')});
-// });
-
-router.get('/signup', function (req, res) {
-    res.render('signup.ejs', {message: req.flash('loginMessage')});
-});
-
-router.get('/profile', function (req, res) {
-    const result = {
-        name: "Łukasz",
-        surname: "Kowalski",
-        notesNumber: 10,
-        eventsNumber: 13
-    };
-
-    res.json(result);
-});
-
-router.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-router.post('/signup', function(req, res, next) {
-    passport.authenticate('local-signup', {session: false}, (err, user, info) => {
+router.post('/signup', (req, res) => {
+    passport.authenticate('signup', {session: false}, (err, user) => {
         if (err || !user) {
+            console.log(err);
+            console.log(user);
             return res.status(400).json({
-                message: 'Something is not right',
-                user: user
+                message: 'Something is not right'
             });
         }
 
-        req.login(user, {session: false}, (err) => {
-            if (err) {
-                res.send(err);
-            }
-            // generate a signed son web token with the contents of user object and return it in the response
-            const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
-            console.log("444444444444444444444444444444");
-            console.log({user, token});
-            console.log("55555555555555555555555555555");
-            return res.json({user, token});
+        console.log(req.body.name);
+        console.log(req.body.surname);
+
+        user.update({name: req.body.name, surname: req.body.surname}, (err, user1) => {
+            console.log(user1);
+            req.login(user, {session: false}, (err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send(err);
+                }
+
+                const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
+                console.log("444444444444444444444444444444");
+                console.log({user, token});
+                console.log("55555555555555555555555555555");
+                res.cookie('jwt', token).json({status: true, token});
+            });
         });
+
+
 
     })(req, res);
 });
 
-// router.post('/login', passport.authenticate('local-login', {
-//     successRedirect: '/profile',
-//     failureRedirect: '/login',
-//     failureFlash: true,
-// }));
+router.post('/login', (req, res) => {
+    passport.authenticate('login', {session: false}, (err, user) => {
+        if (err || !user)
+            return res.status(401).json({status: false});
 
-// router.post('/login', passport.authenticate('jwt', { session: false },
-//     function(req, res) {
-//         console.log("login");
-//         console.log(req);
-//         console.log(res);
-//
-//         // res.send(req.user.profile);
-//     })
-// );
-
-router.post('/login', function(req, res, next) {
-    console.log("00000000000000000000000000000000000000");
-    passport.authenticate('login', {session: false}, (err, user, info) => {
-        console.log("dsadsadsadsadasdsadassdadsdsaasdadsssadsdsdaadsdadsads");
-        if (err || !user) {
-            return res.status(400).json({
-                message: 'Something is not right',
-                user: user
-            });
-        }
-
-        req.login(user, {session: false}, (err) => {
-            if (err) {
-                res.send(err);
-            }
-            // generate a signed son web token with the contents of user object and return it in the response
-            const token = jwt.sign(user.toJSON(), 'your_jwt_secret');
-            console.log("444444444444444444444444444444");
-            console.log({user, token});
-            console.log("55555555555555555555555555555");
-            return res.json({user, token});
-        });
-
+        const token = jwt.sign(user.toJSON(), "your_jwt_secret");
+        res.cookie("jwt", token, {httpOnly: true}).json({status: true, token});
     })(req, res);
 });
 
+router.get('/profile', (req, res) => {
+    let result = null;
+    let loggedUser = getLoggedUser(req.cookies);
 
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        result = {
+            login: user.login,
+            name: user.name,
+            surname: user.surname,
+            notesNumber: user.notes.length,
+            eventsNumber: user.events.length
+        };
+
+        res.json(result);
+    });
+});
+
+router.get('/notes/:page', (req, res) => {
+    const firstPage = parseInt(req.params.page, 10);
+    const lastPage = firstPage + 1;
+    const elemsOnPage = 4;
+
+    let loggedUser = getLoggedUser(req.cookies);
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        const firstElem = firstPage * elemsOnPage;
+        const lastElem = lastPage * elemsOnPage;
+        const maxPage = Math.floor(user.notes.length/elemsOnPage);
+        res.json({notes: user.notes.slice(firstElem, lastElem), maxPage: maxPage});
+    });
+});
+
+router.post('/note', (req, res) => {
+    let note = req.body.note;
+    let loggedUser = getLoggedUser(req.cookies);
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        if (user.notes.find(existingNote => existingNote.name === note.name))
+            return res.status(400).json({status: false, message: "Note must have unique name"});
+
+        let notes = user.notes;
+        notes.unshift(note);
+
+        user.update({notes: notes}, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({status: false});
+            }
+            res.json({status: true});
+        });
+    });
+});
+
+router.put('/note', (req, res) => {
+    let loggedUser = getLoggedUser(req.cookies);
+    let oldNote = req.body.oldNote;
+    let newNote = req.body.newNote;
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        if (user.notes.filter(note => note.name !== oldNote.name).find(existingNote => existingNote.name === newNote.name))
+            return res.status(400).json({status: false, message: "Note must have unique name"});
+
+        user.notes.splice(findIndex(user.notes, oldNote), 1, newNote);
+
+        user.update({notes: user.notes}, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({status: false});
+            }
+            res.json({status: true});
+        });
+    });
+});
+
+router.delete('/note', (req, res) => {
+    let loggedUser = getLoggedUser(req.cookies);
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        user.notes.splice(findIndex(user.notes, req.body.note), 1);
+
+        user.update({notes: user.notes}, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({status: false});
+            }
+
+            res.json({status: true});
+        });
+    });
+});
+
+router.get('/events', (req, res) => {
+    let loggedUser = getLoggedUser(req.cookies);
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        let results = {
+            monday: {
+                events: []
+            },
+            tuesday: {
+                events: []
+            },
+            wednesday: {
+                events: []
+            },
+            thursday: {
+                events: []
+            },
+            friday: {
+                events: []
+            },
+            saturday: {
+                events: []
+            },
+            sunday: {
+                events: []
+            }
+        };
+
+        Object.keys(results).forEach(key => {
+            const events = user.events.filter(event => event.weekday === key);
+
+            if (events)
+                results[key].events = events;
+        });
+
+        res.json(results);
+    });
+});
+
+router.post('/event', (req, res) => {
+    let loggedUser = getLoggedUser(req.cookies);
+    let event = req.body;
+    const [startHours, startMinutes] = event.start.split(":");
+    const [endHours, endMinutes] = event.end.split(":");
+    event = {
+        name: event.title,
+        period: {
+            start: {
+                hours: parseInt(startHours, 10),
+                minutes: parseInt(startMinutes, 10)
+            },
+            end: {
+                hours: parseInt(endHours, 10),
+                minutes: parseInt(endMinutes, 10)
+            }
+        },
+        description: event.description,
+        weekday: event.weekday,
+        backgroundColor: event.background,
+        color: event.color
+    };
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        if (overlaps(user.events, event))
+            return res.status(400).json({status: false, message: "New event overlaps existing events"});
+
+        let events = user.events;
+        events.push(event);
+
+        user.update({events: events}, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({status: false});
+            }
+            res.json({status: true});
+        });
+    });
+});
+
+router.put('/event', (req, res) => {
+    let loggedUser = getLoggedUser(req.cookies);
+    let oldEvent = req.body.oldEvent;
+    let newEvent = req.body.newEvent;
+    delete oldEvent.description_brief;
+    const [startHours, startMinutes] = newEvent.start.split(":");
+    const [endHours, endMinutes] = newEvent.end.split(":");
+
+    let event = {
+        name: newEvent.name,
+        period: {
+            start: {
+                hours: parseInt(startHours, 10),
+                minutes: parseInt(startMinutes, 10)
+            },
+            end: {
+                hours: parseInt(endHours, 10),
+                minutes: parseInt(endMinutes, 10)
+            }
+        },
+        description: newEvent.description,
+        weekday: newEvent.weekday,
+        backgroundColor: newEvent.background,
+        color: newEvent.color
+    };
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        if (overlaps(user.events, event, oldEvent))
+            return res.status(400).json({status: false, message: "New event overlaps existing events"});
+
+        user.events.splice(findIndex(user.events, oldEvent), 1, event);
+
+        user.update({events: user.events}, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({status: false});
+            }
+            res.json({status: true});
+        });
+    });
+});
+
+router.delete('/event', (req, res) => {
+    let loggedUser = getLoggedUser(req.cookies);
+    let event = req.body.event;
+    delete event.description_brief;
+
+    if (!loggedUser.loggedIn)
+        return res.status(401).json();
+
+    getUser(loggedUser).then(user => {
+        if (!user)
+            return res.status(400).json({status: false, message: "Invalid user"});
+
+        user.events.splice(findIndex(user.events, event), 1);
+
+        user.update({events: user.events}, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({status: false});
+            }
+            res.json({status: true});
+        });
+    });
+});
 
 module.exports = router;
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/login');
-}
+overlaps = (events, newEvent, oldEvent) => {
+    return events
+        .filter(existingEvent => existingEvent.weekday === newEvent.weekday)
+        .map(existingEvent => existingEvent.period)
+        .filter(period => {
+
+            const start = period.start.hours + period.start.minutes / 60;
+            const end = period.end.hours + period.end.minutes / 60;
+            const newStart = oldEvent.period.start.hours + oldEvent.period.start.minutes / 60;
+            const newEnd = oldEvent.period.end.hours + oldEvent.period.end.minutes / 60;
+
+            return !(start === newStart && end === newEnd);
+        })
+        .find(period => {
+            const start = period.start.hours + period.start.minutes / 60;
+            const end = period.end.hours + period.end.minutes / 60;
+            const newStart = newEvent.period.start.hours + newEvent.period.start.minutes / 60;
+            const newEnd = newEvent.period.end.hours + newEvent.period.end.minutes / 60;
+
+            return (newStart >= start && newStart < end) || (newEnd > start && newEnd <= end);
+        });
+};
+
+findIndex = (array, newElem) => {
+    let tmp = {};
+    Object.keys(newElem).sort().forEach((key) => tmp[key] = newElem[key]);
+    let elem = tmp;
+
+    return array.findIndex(existingElem => {
+        let tmp = {};
+        Object.keys(existingElem).sort().forEach((key) => tmp[key] = existingElem[key]);
+        existingElem = tmp;
+        return JSON.stringify(existingElem) === JSON.stringify(elem);
+    });
+};
+
+getUser = async user => {
+    return await User.findOne({login: user.data.login});
+};
+
+getLoggedUser = (cookies) => {
+    let decoded = null;
+    let result = false;
+
+    try {
+        decoded = jwt.verify(cookies.jwt, "your_jwt_secret");
+
+        if (decoded) {
+            console.log("Authorized");
+            result = true;
+        } else {
+            console.log("Unauthorized");
+            result = false;
+        }
+    } catch (e) {
+        console.log("Unauthorized");
+        result = false;
+    }
+
+    return {loggedIn: result, data: decoded};
+};

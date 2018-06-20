@@ -1,0 +1,12 @@
+.nav > li > a {
+  transition: all 0.5s;
+  color: #fff;
+}
+.nav > li > a:hover {
+  color: initial;
+}
+.nav .dropdown-menu {
+  left: 0 !important;
+  right: 0 !important;
+}
+/*# sourceMappingURL=menu.css.map */

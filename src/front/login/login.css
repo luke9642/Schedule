@@ -12,4 +12,16 @@
 .width-100 {
   width: 100%;
 }
+.info-alert {
+  transition: opacity 0.5s;
+  opacity: 0;
+  position: absolute;
+}
+.info-alert h3 {
+  margin: 0;
+}
+.info-alert.show {
+  opacity: 1;
+  position: initial;
+}
 /*# sourceMappingURL=login.css.map */

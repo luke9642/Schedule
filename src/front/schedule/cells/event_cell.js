@@ -1,6 +1,7 @@
 import React from "react";
-import {Button, FormControl, Glyphicon, Modal, OverlayTrigger, Popover} from "react-bootstrap";
+import {Button, Glyphicon, OverlayTrigger, Popover} from "react-bootstrap";
 import "./cell.css";
+import EventUpdate from "./event_update";
 
 export default class EventCell extends React.Component {
     constructor(props) {
@@ -40,10 +41,6 @@ export default class EventCell extends React.Component {
         };
     }
 
-    componentDidMount() {
-
-    }
-
     increase_brightness = (hex, percent) => {
         // strip "#" if it's there
         hex = hex.replace(/^\s*#|\s*$/g, '');
@@ -65,6 +62,14 @@ export default class EventCell extends React.Component {
         this.setState({linkStyle: style});
     };
 
+    getProperTime = (time) => {
+        const tmpHours = time.hours;
+        const tmpMinutes = time.minutes;
+        const hours = tmpHours < 10 ? "0" + tmpHours : tmpHours;
+        const minutes = tmpMinutes < 10 ? "0" + tmpMinutes : tmpMinutes;
+        return hours + ":" + minutes;
+    };
+
     // noinspection JSUnusedGlobalSymbols
     render = () => (
         <li className={this.props.className} style={this.state.listStyle}>
@@ -76,20 +81,15 @@ export default class EventCell extends React.Component {
                     {this.props.children}
                 </Button>
             </OverlayTrigger>
-            <form onChange={() => {}}>
-                <Modal show={this.state.show} onHide={() => this.setState({show: false})}>
-                    <Modal.Header closeButton>
-                        <Modal.Title><FormControl type="text" defaultValue={this.props.event.name}/></Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <FormControl componentClass="textarea" defaultValue={this.props.event.description}/>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <FormControl style={{display: "inline", width: "initial"}} type="reset" value="Revert"/>
-                        <Button bsStyle="primary">Save changes</Button>
-                    </Modal.Footer>
-                </Modal>
-            </form>
+            <EventUpdate
+                weekdays={this.props.weekdays}
+                event={this.props.event}
+                start={this.getProperTime(this.props.event.period.start)}
+                end={this.getProperTime(this.props.event.period.end)}
+                show={this.state.show}
+                onHide={() => this.setState({show: false})}
+                updateEvents={this.props.updateEvents}
+            />
         </li>
     );
 }

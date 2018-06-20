@@ -1,0 +1,29 @@
+.note {
+  transition: all 0.5s;
+  margin: 10px 5px;
+  text-align: justify;
+}
+.note .edit {
+  transition: all 0.5s;
+  opacity: 0;
+}
+.note:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.note:hover .edit {
+  opacity: 1;
+}
+#add-note {
+  border-radius: 60px;
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #00A591;
+  border-color: #009480;
+}
+#add-note:hover {
+  background: #009480;
+}
+/*# sourceMappingURL=notes.css.map */

@@ -1,0 +1,14 @@
+#add-event {
+  border-radius: 60px;
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #D2691E;
+  border-color: #c1580d;
+}
+#add-event:hover {
+  background: #c1580d;
+}
+/*# sourceMappingURL=schedule.css.map */
